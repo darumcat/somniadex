@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEX Swap & Mint</title>
+  <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e0033, #3a0068);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(128, 0, 255, 0.5);
+    }
+    button {
+      background: #6200ea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #3700b3;
+    }
+    input {
+      padding: 10px;
+      width: 80%;
+      margin: 10px;
+      border-radius: 5px;
+      border: 1px solid #6200ea;
+    }
+    .token-img {
+      width: 80px;
+      height: 80px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>DEX Swap & Mint</h1>
+    
+    <!-- Токены и свап -->
+    <div>
+      <img src="https://cryptologos.cc/logos/fantom-ftm-logo.png" class="token-img" id="fromTokenImg">
+      <button onclick="swapTokens()">⇅ SWAP</button>
+      <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" class="token-img" id="toTokenImg">
+    </div>
+
+    <div>
+      <p>From: <span id="fromToken">FDRMCT</span></p>
+      <input type="number" id="amount" placeholder="Amount">
+      <p>To: <span id="toToken">CRPTHZ</span></p>
+      <button onclick="doSwap()">SWAP TOKENS</button>
+    </div>
+
+    <hr>
+
+    <!-- Минт -->
+    <div>
+      <h3>Mint Tokens (Max: 1000)</h3>
+      <input type="number" id="mintAmount" placeholder="Amount to mint">
+      <div>
+        <button onclick="mintToken('FDRMCT')">MINT FDRMCT</button>
+        <button onclick="mintToken('CRPTHZ')">MINT CRPTHZ</button>
+      </div>
+    </div>
+
+    <div id="status" style="margin-top: 20px; color: #00ffaa;"></div>
+  </div>
+
+  <script>
+    // Адреса контрактов
+    const FDRMCT = "0x5a631147bE09F4af9f4f1E817e304D12bBD6Eb22";
+    const CRPTHZ = "0x9757112F515f6c3c8dCe912b595667780F67B3E8";
+    const DEX_ADDRESS = "0x7faD8f4cA2D2315abeDd6D6a2812C60De68dA15E";
+    const MAX_MINT = 1000;
+
+    let provider;
+    let signer;
+
+    // Подключение MetaMask
+    async function connectWallet() {
+      if (window.ethereum) {
+        try {
+          provider = new ethers.providers.Web3Provider(window.ethereum);
+          await window.ethereum.request({ method: "eth_requestAccounts" });
+          signer = provider.getSigner();
+          document.getElementById("status").innerText = "Wallet connected!";
+        } catch (error) {
+          document.getElementById("status").innerText = "Error: " + error.message;
+        }
+      } else {
+        document.getElementById("status").innerText = "Please install MetaMask!";
+      }
+    }
+
+    // Поменять токены местами
+    function swapTokens() {
+      const fromToken = document.getElementById("fromToken");
+      const toToken = document.getElementById("toToken");
+      const fromImg = document.getElementById("fromTokenImg");
+      const toImg = document.getElementById("toTokenImg");
+
+      [fromToken.innerText, toToken.innerText] = [toToken.innerText, fromToken.innerText];
+      [fromImg.src, toImg.src] = [toImg.src, fromImg.src];
+    }
+
+    // Имитация свапа (реальный вызов контракта потребует ABI)
+    async function doSwap() {
+      const amount = document.getElementById("amount").value;
+      const fromToken = document.getElementById("fromToken").innerText;
+      
+      if (!amount || !signer) {
+        document.getElementById("status").innerText = "Connect wallet and enter amount!";
+        return;
+      }
+
+      document.getElementById("status").innerText = 
+        `Swapping ${amount} ${fromToken} via DEX: ${DEX_ADDRESS}... (Simulation)`;
+    }
+
+    // Минт токенов
+    async function mintToken(tokenName) {
+      const amount = parseInt(document.getElementById("mintAmount").value);
+      
+      if (!amount || !signer) {
+        document.getElementById("status").innerText = "Connect wallet and enter amount!";
+        return;
+      }
+
+      if (amount > MAX_MINT) {
+        document.getElementById("status").innerText = `Error: Max ${MAX_MINT} tokens per wallet!`;
+        return;
+      }
+
+      const tokenAddress = tokenName === "FDRMCT" ? FDRMCT : CRPTHZ;
+      document.getElementById("status").innerText = 
+        `Minting ${amount} ${tokenName} at ${tokenAddress}... (Simulation)`;
+    }
+
+    // Автоподключение кошелька при загрузке
+    window.onload = connectWallet;
+  </script>
+</body>
+</html>
