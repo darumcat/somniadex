@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Somnia DEX</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .network-banner {
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        margin-top: 15px;
+        background-color: #ff3860;
+        color: white;
+        display: none;
+      }
+      .network-banner.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Somnia DEX</h1>
+        <div class="network-banner" id="networkBanner">
+          ⚠️ Please switch to Somnia Testnet
+        </div>
+      </header>
+
+      <main>
+        <section class="wallet-section">
+          <button id="connectWalletBtn" class="wallet-button">
+            Connect MetaMask
+          </button>
+          <div id="walletAddress" class="wallet-address"></div>
+        </section>
+
+        <section class="swap-interface" id="swapInterface">
+          <div class="swap-form">
+            <div class="input-group">
+              <label for="fromToken">From:</label>
+              <div class="token-selector">
+                <img
+                  id="fromTokenIcon"
+                  class="token-icon"
+                  src="./fdrmct.png"
+                  alt="Token"
+                />
+                <select id="fromToken">
+                  <option value="FDRMCT">FDRMCT</option>
+                  <option value="CRPTHZ">CRPTHZ</option>
+                </select>
+              </div>
+              <input
+                type="number"
+                id="fromAmount"
+                placeholder="Amount"
+                min="0"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="toToken">To:</label>
+              <div class="token-selector">
+                <img
+                  id="toTokenIcon"
+                  class="token-icon"
+                  src="./crpthz.png"
+                  alt="Token"
+                />
+                <select id="toToken">
+                  <option value="CRPTHZ">CRPTHZ</option>
+                  <option value="FDRMCT">FDRMCT</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="action-buttons">
+              <button id="swapBtn" disabled>Swap Tokens</button>
+              <button id="mintBtn" disabled>Mint Tokens</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <div id="status" class="status-box"></div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+    <script>
+      if (typeof window.ethereum === "undefined") {
+        const status = document.getElementById("status");
+        if (status) {
+          status.textContent = "Please install MetaMask extension!";
+          status.style.color = "red";
+        }
+      }
+    </script>
+  </body>
+</html>
