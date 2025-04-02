@@ -10,10 +10,17 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html')
-      }
+      },
+      external: [] // Явно указываем внешние зависимости, если нужно
     }
   },
   server: {
-    open: true
+    open: true,
+    port: 3000
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src') // Добавляем алиас для удобных путей
+    }
   }
 })
