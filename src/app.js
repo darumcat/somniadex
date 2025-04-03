@@ -1,73 +1,34 @@
-import { connectWallet, swapTokens, mintToken } from './wallet.js';
-import { updateUI, showLoading, hideLoading } from './ui.js';
+import { connectWallet, swapTokens, mintToken } from "./wallet.js";
+import { updateStatus } from "./ui.js";
 
-// Подключение к кошельку
-document.getElementById('connectWallet').addEventListener('click', async () => {
-    await connectWallet();
-});
+// Инициализация при загрузке
+document.addEventListener("DOMContentLoaded", () => {
+    // Подключение кошелька
+    document.getElementById("connectWallet").addEventListener("click", async () => {
+        await connectWallet();
+    });
 
-// Событие для кнопки Swap
-document.getElementById('swap').addEventListener('click', async () => {
-    const amount = document.getElementById('amount').value;
-    if (!amount || isNaN(amount) || amount <= 0) {
-        alert('Please enter a valid amount');
-        return;
-    }
+    // Swap токенов
+    document.getElementById("swapBtn").addEventListener("click", async () => {
+        const fromToken = document.getElementById("fromToken").value;
+        const toToken = document.getElementById("toToken").value;
+        const amount = document.getElementById("fromAmount").value;
+        
+        if (!amount || isNaN(amount) {
+            updateStatus("Please enter valid amount", true);
+            return;
+        }
+        
+        await swapTokens(fromToken, toToken, amount);
+    });
 
-    try {
-        // Показать индикатор загрузки
-        showLoading();
+    // Mint FDRMCT
+    document.getElementById("mintFDRMCT").addEventListener("click", async () => {
+        await mintToken("FDRMCT");
+    });
 
-        // Выполнить обмен
-        await swapTokens(amount, '0x5a631147bE09F4af9f4f1E817e304D12bDD6Eb22', '0x9757112F515f6c3c8dCe912b595667780F67B3E8');
-    } catch (error) {
-        console.error("Swap failed:", error);
-    } finally {
-        // Скрыть индикатор загрузки
-        hideLoading();
-    }
-});
-
-// Событие для кнопки Mint FDRMCT
-document.getElementById('mintFDRMCT').addEventListener('click', async () => {
-    const amount = document.getElementById('mintAmountFDRMCT').value;
-    if (!amount || isNaN(amount) || amount <= 0) {
-        alert('Please enter a valid amount for FDRMCT');
-        return;
-    }
-
-    try {
-        // Показать индикатор загрузки
-        showLoading();
-
-        // Минт токен FDRMCT
-        await mintToken(amount, 'FDRMCT');
-    } catch (error) {
-        console.error("Mint failed:", error);
-    } finally {
-        // Скрыть индикатор загрузки
-        hideLoading();
-    }
-});
-
-// Событие для кнопки Mint CRPTHZ
-document.getElementById('mintCRPTHZ').addEventListener('click', async () => {
-    const amount = document.getElementById('mintAmountCRPTHZ').value;
-    if (!amount || isNaN(amount) || amount <= 0) {
-        alert('Please enter a valid amount for CRPTHZ');
-        return;
-    }
-
-    try {
-        // Показать индикатор загрузки
-        showLoading();
-
-        // Минт токен CRPTHZ
-        await mintToken(amount, 'CRPTHZ');
-    } catch (error) {
-        console.error("Mint failed:", error);
-    } finally {
-        // Скрыть индикатор загрузки
-        hideLoading();
-    }
+    // Mint CRPTHZ
+    document.getElementById("mintCRPTHZ").addEventListener("click", async () => {
+        await mintToken("CRPTHZ");
+    });
 });
