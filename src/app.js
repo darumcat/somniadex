@@ -19,14 +19,6 @@ class App {
             }
         });
 
-        document.getElementById('mint-fdrmct').addEventListener('click', async () => {
-            await this.mintToken('FDRMCT');
-        });
-
-        document.getElementById('mint-crpthz').addEventListener('click', async () => {
-            await this.mintToken('CRPTHZ');
-        });
-
         document.getElementById('swap-btn').addEventListener('click', async () => {
             await this.executeSwap();
         });
@@ -83,29 +75,6 @@ class App {
         }
     }
 
-    async mintToken(tokenName) {
-        try {
-            const buttonId = `mint-${tokenName.toLowerCase()}`;
-            const button = document.getElementById(buttonId);
-            
-            button.disabled = true;
-            button.textContent = 'Minting...';
-            
-            const tx = await this.wallet.contracts[tokenName].mint(
-                ethers.utils.parseUnits("1000", 18)
-            );
-            await tx.wait();
-            
-            UI.showSuccess(`Successfully minted 1000 ${tokenName}`);
-        } catch (error) {
-            UI.showError(`Minting failed: ${error.message}`);
-        } finally {
-            const button = document.getElementById(`mint-${tokenName.toLowerCase()}`);
-            button.disabled = false;
-            button.textContent = `Mint ${tokenName}`;
-        }
-    }
-
     async updateQuote() {
         if (!this.wallet) return;
         
@@ -155,13 +124,9 @@ class App {
             swapBtn.disabled = true;
             swapBtn.textContent = 'Swapping...';
 
-            // 1. Получаем адрес пользователя
             const userAddress = this.wallet.address;
-            
-            // 2. Проверяем баланс перед свапом
             const balanceBefore = await Wallet.getTokenBalance(toToken, userAddress);
 
-            // 3. Выполняем approve
             const amountIn = ethers.utils.parseUnits(amount, 18);
             const approveTx = await this.wallet.contracts[fromToken].approve(
                 CONFIG.DEX.address,
@@ -169,15 +134,13 @@ class App {
             );
             await approveTx.wait();
 
-            // 4. Выполняем swap (токены придут пользователю)
             const swapTx = await this.wallet.contracts.DEX.swap(
                 CONFIG.TOKENS[fromToken].address,
                 amountIn,
-                { gasLimit: 500000 } // Добавляем лимит газа
+                { gasLimit: 500000 }
             );
             await swapTx.wait();
 
-            // 5. Проверяем, что токены получены
             const balanceAfter = await Wallet.getTokenBalance(toToken, userAddress);
             const receivedAmount = balanceAfter.sub(balanceBefore);
 
