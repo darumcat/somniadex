@@ -1,31 +1,235 @@
+:root {
+    --primary: #6e3d9e;
+    --primary-dark: #4a2a6e;
+    --secondary: #8a5cb6;
+    --text: #ffffff;
+    --bg-gradient: linear-gradient(135deg, #1a0033, #3a0068);
+    --card-bg: rgba(30, 0, 51, 0.7);
+    --card-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
+    min-height: 100vh;
+    background: var(--bg-gradient);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
 }
 
-button {
-    padding: 10px;
-    background-color: #007bff;
+.container {
+    width: 100%;
+    max-width: 800px;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--card-border);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+h1, h2 {
+    color: var(--text);
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #9c27b0, #3f51b5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.wallet-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.wallet-button {
+    background: var(--primary);
     color: white;
     border: none;
-    border-radius: 5px;
+    padding: 12px 24px;
+    border-radius: 8px;
     cursor: pointer;
-    margin: 10px 0;
+    font-weight: bold;
+    transition: all 0.3s;
 }
 
-button:hover {
-    background-color: #0056b3;
+.wallet-button:hover {
+    background: var(--secondary);
+    transform: translateY(-2px);
 }
 
-input {
-    padding: 10px;
-    margin: 5px 0;
-    width: 200px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+.wallet-address {
+    font-family: monospace;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 12px;
+    border-radius: 8px;
+    word-break: break-all;
 }
 
-#loading {
-    color: #ff0000;
+.dex-interface {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.swap-section, .mint-section {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+}
+
+.token-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.token-from, .token-to {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.token-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.swap-arrow {
+    font-size: 24px;
+    padding: 0 10px;
+    color: var(--secondary);
+}
+
+select, input {
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 16px;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--secondary);
+}
+
+.action-button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 14px;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.action-button:hover {
+    background: var(--secondary);
+}
+
+.mint-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.mint-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--primary-dark);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.mint-button:hover {
+    background: var(--secondary);
+}
+
+.mint-button img {
+    width: 24px;
+    height: 24px;
+}
+
+.status-box {
+    margin-top: 20px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.loading-spinner {
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 5px solid var(--secondary);
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .token-selector {
+        flex-direction: column;
+    }
+    
+    .swap-arrow {
+        transform: rotate(90deg);
+        padding: 10px 0;
+    }
+    
+    .mint-buttons {
+        flex-direction: column;
+    }
 }
