@@ -1,20 +1,17 @@
-export function updateUI(elementId, value) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.textContent = value;
+export function updateStatus(message, isError = false) {
+    const status = document.getElementById("status");
+    if (status) {
+        status.textContent = message;
+        status.style.color = isError ? "#ff6b6b" : "#4CAF50";
     }
 }
 
 export function showLoading() {
-    const loadingElement = document.getElementById("loading");
-    if (loadingElement) {
-        loadingElement.style.display = "block";
-    }
+    const loader = document.getElementById("loading");
+    if (loader) loader.style.display = "flex";
 }
 
 export function hideLoading() {
-    const loadingElement = document.getElementById("loading");
-    if (loadingElement) {
-        loadingElement.style.display = "none";
-    }
+    const loader = document.getElementById("loading");
+    if (loader) loader.style.display = "none";
 }
