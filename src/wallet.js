@@ -19,11 +19,21 @@ async function connectWallet() {
             const address = await signer.getAddress();
             updateUI("walletAddress", address);
             console.log("Connected to wallet:", address);
+            checkNetwork();
         } catch (error) {
             console.error("Wallet connection failed:", error);
         }
     } else {
         alert("Please install MetaMask!");
+    }
+}
+
+async function checkNetwork() {
+    const network = await provider.getNetwork();
+    if (network.chainId !== 1117) { // ID Somnia testnet
+        alert("Please connect to Somnia testnet.");
+    } else {
+        updateUI("networkStatus", "Connected to Somnia testnet");
     }
 }
 
@@ -48,4 +58,4 @@ async function swapTokens(amount, fromToken, toToken) {
     hideLoading();
 }
 
-export { connectWallet, swapTokens, DEX_ADDRESS, TOKEN_ADDRESSES };
+export { connectWallet, swapTokens, DEX_ADDRESS, TOKEN_ADDRESSES, checkNetwork };
