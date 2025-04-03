@@ -1,117 +1,98 @@
 export const PROVIDER_URL = "https://dream-rpc.somnia.network/";
 export const DEX_ABI = [
-   [
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_tokenA",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_tokenB",
-				"type": "address"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amountA",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amountB",
-				"type": "uint256"
-			}
-		],
-		"name": "addLiquidity",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "reserveA",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "reserveB",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amountAIn",
-				"type": "uint256"
-			}
-		],
-		"name": "swapAToB",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amountBIn",
-				"type": "uint256"
-			}
-		],
-		"name": "swapBToA",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "tokenA",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "tokenB",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	}
-]
+    // ABI для вашего DEX контракта
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "address"
+            },
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "getSwapRate",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "fromToken",
+                "type": "address"
+            },
+            {
+                "name": "toToken",
+                "type": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "swap",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
 ];
+
+export const FDRMCT_ABI = [
+    // ABI для контракта FDRMCT
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "mint",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+];
+
+export const CRPTHZ_ABI = [
+    // ABI для контракта CRPTHZ
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "mint",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+];
+
+export const TOKEN_ADDRESSES = {
+    FDRMCT: "0x5a631147bE09F4af9f4f1E817e304D12bDD6Eb22",
+    CRPTHZ: "0x9757112F515f6c3c8dCe912b595667780F67B3E8"
+};
