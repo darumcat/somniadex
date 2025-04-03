@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Somnia DEX</title>
+    <link rel="stylesheet" href="./src/styles.css">
+</head>
+<body>
+    <header>
+        <img src="./public/assets/logo.png" alt="Somnia DEX" class="banner">
+    </header>
+    <main>
+        <h1>Somnia DEX</h1>
+        <button id="connectWallet">Connect Wallet</button>
+        <p id="walletAddress">Not connected</p>
+
+        <div>
+            <input type="text" id="swapAmount" placeholder="Amount">
+            <select id="fromToken">
+                <option value="FDRMCT">FDRMCT</option>
+                <option value="CRPTHZ">CRPTHZ</option>
+            </select>
+            <select id="toToken">
+                <option value="CRPTHZ">CRPTHZ</option>
+                <option value="FDRMCT">FDRMCT</option>
+            </select>
+            <button id="swapButton">Swap</button>
+        </div>
+
+        <p id="swapStatus"></p>
+
+        <div id="loadingIndicator" class="hidden">Swapping...</div>
+    </main>
+
+    <script type="module" src="./src/wallet.js"></script>
+    <script type="module" src="./src/swap.js"></script>
+</body>
+</html>
