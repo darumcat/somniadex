@@ -5,16 +5,15 @@ export default defineConfig({
   base: './',
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
+    emptyOutDir: true,
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html')
       }
-    },
-    minify: 'terser',
-    sourcemap: false
+    }
   },
   server: {
-    port: 3000
+    port: 3000,
+    strictPort: true
   }
 });
