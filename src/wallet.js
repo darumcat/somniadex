@@ -1,64 +1,75 @@
 import { ethers } from "ethers";
-import { PROVIDER_URL, DEX_ABI } from "./config.js";
-import { updateUI, showLoading, hideLoading } from "./ui.js";
+import { CONTRACTS, DEX_ABI, TOKEN_ABI } from "./config.js";
+import { updateStatus, showLoading, hideLoading } from "./ui.js";
 
-const DEX_ADDRESS = "0x3344f77ce1d16a8e223fbb53bf4d1d01384eb8f4";
-const TOKEN_ADDRESSES = {
-    FDRMCT: "0x5a631147bE09F4af9f4f1E817e304D12bDD6Eb22",
-    CRPTHZ: "0x9757112F515f6c3c8dCe912b595667780F67B3E8"
-};
-
-const provider = new ethers.providers.JsonRpcProvider(PROVIDER_URL);
+let provider;
 let signer;
 
-async function connectWallet() {
-    if (window.ethereum) {
-        try {
-            // Запрашиваем доступ к аккаунтам
-            const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-            
-            if (accounts.length === 0) {
-                alert("No accounts found. Please make sure MetaMask is connected.");
-                return;
-            }
-
-            signer = provider.getSigner();
-            const address = await signer.getAddress();
-
-            // Проверяем, что адрес корректный
-            if (address === accounts[0]) {
-                updateUI("walletAddress", address);
-                console.log("Connected to wallet:", address);
-            } else {
-                alert("Failed to connect to the selected account.");
-            }
-        } catch (error) {
-            console.error("Wallet connection failed:", error);
+export async function connectWallet() {
+    try {
+        if (!window.ethereum) {
+            throw new Error("MetaMask not installed");
         }
-    } else {
-        alert("Please install MetaMask!");
+
+        // Запрос подключения аккаунта
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer = provider.getSigner();
+        
+        const address = await signer.getAddress();
+        document.getElementById("walletAddress").textContent = 
+            `${address.slice(0, 6)}...${address.slice(-4)}`;
+            
+        updateStatus("Wallet connected successfully");
+        return true;
+    } catch (error) {
+        console.error("Wallet connection failed:", error);
+        updateStatus(`Connection failed: ${error.message}`, true);
+        return false;
     }
 }
 
-async function swapTokens(amount, fromToken, toToken) {
+export async function swapTokens(fromToken, toToken, amount) {
     if (!signer) {
-        alert("Please connect your wallet first.");
+        updateStatus("Please connect wallet first", true);
         return;
     }
+
     showLoading();
     try {
-        const contract = new ethers.Contract(DEX_ADDRESS, DEX_ABI, signer);
-        const tx = await contract.swap(
-            TOKEN_ADDRESSES[fromToken],
-            TOKEN_ADDRESSES[toToken],
-            ethers.utils.parseUnits(amount, 18)
+        const dex = new ethers.Contract(CONTRACTS.DEX, DEX_ABI, signer);
+        const tx = await dex.swap(
+            CONTRACTS[fromToken],
+            CONTRACTS[toToken],
+            ethers.utils.parseEther(amount.toString())
         );
         await tx.wait();
-        console.log("Swap successful");
+        updateStatus(`Swap successful! TX: ${tx.hash}`);
     } catch (error) {
         console.error("Swap failed:", error);
+        updateStatus(`Swap failed: ${error.message}`, true);
+    } finally {
+        hideLoading();
     }
-    hideLoading();
 }
 
-export { connectWallet, swapTokens, DEX_ADDRESS, TOKEN_ADDRESSES };
+export async function mintToken(tokenName) {
+    if (!signer) {
+        updateStatus("Please connect wallet first", true);
+        return;
+    }
+
+    showLoading();
+    try {
+        const token = new ethers.Contract(CONTRACTS[tokenName], TOKEN_ABI, signer);
+        const tx = await token.mint(await signer.getAddress());
+        await tx.wait();
+        updateStatus(`Minted 1000 ${tokenName}! TX: ${tx.hash}`);
+    } catch (error) {
+        console.error("Mint failed:", error);
+        updateStatus(`Mint failed: ${error.message}`, true);
+    } finally {
+        hideLoading();
+    }
+}
