@@ -67,16 +67,19 @@ export class Wallet {
 
     static async disconnect() {
         try {
-            // 1. Очистка MetaMask
+            // 1. Безопасная очистка MetaMask
             if (window.ethereum) {
+                // Удаляем все листенеры
                 window.ethereum.removeAllListeners();
                 
-                if (window.ethereum.selectedAddress) {
-                    window.ethereum.selectedAddress = null;
+                // Используем только безопасные методы отключения
+                if (typeof window.ethereum.disconnect === 'function') {
+                    await window.ethereum.disconnect();
                 }
                 
-                if (window.ethereum.disconnect) {
-                    await window.ethereum.disconnect();
+                // Альтернативный метод для некоторых провайдеров
+                if (typeof window.ethereum.close === 'function') {
+                    await window.ethereum.close();
                 }
             }
             
@@ -87,7 +90,7 @@ export class Wallet {
             });
             
             // 3. Отправка события
-            window.dispatchEvent(new Event('walletDisconnected'));
+            window.dispatchEvent(new CustomEvent('walletDisconnected'));
             
             return true;
             
