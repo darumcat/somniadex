@@ -1,6 +1,6 @@
-export const PROVIDER_URL = "https://dream-rpc.somnia.network";
-
-export const DEX_ABI = [ [
+export const PROVIDER_URL = "https://dream-rpc.somnia.network/";
+export const DEX_ABI = [
+   [
 	{
 		"inputs": [
 			{
@@ -113,4 +113,5 @@ export const DEX_ABI = [ [
 		"stateMutability": "view",
 		"type": "function"
 	}
-]];
+]
+];
