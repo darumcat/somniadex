@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval';">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Somnia SWAP</title>
-    <link rel="stylesheet" href="/src/styles.css"> 
+    <link rel="stylesheet" href="./src/styles.css">
 </head>
 <body>
     <h1>Somnia SWAP CRPTHZ to FDRMCT</h1>
@@ -16,8 +15,21 @@
     <input type="number" id="amount" placeholder="Enter amount">
     <button id="swap">Swap</button>
 
+    <h2>Mint Tokens</h2>
+    <div>
+        <h3>Mint FDRMCT</h3>
+        <input type="number" id="mintAmountFDRMCT" placeholder="Amount to mint">
+        <button id="mintFDRMCT">Mint FDRMCT</button>
+    </div>
+
+    <div>
+        <h3>Mint CRPTHZ</h3>
+        <input type="number" id="mintAmountCRPTHZ" placeholder="Amount to mint">
+        <button id="mintCRPTHZ">Mint CRPTHZ</button>
+    </div>
+
     <p id="loading" style="display:none;">Processing...</p>
 
-    <script type="module" src="/src/app.js"></script>
+    <script type="module" src="./src/app.js"></script>
 </body>
 </html>
