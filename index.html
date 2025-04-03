@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Somnia DEX</title>
-    <link rel="icon" href="/assets/favicon.ico">
-    <link rel="stylesheet" href="style.css">
+    <title>Somnia SWAP</title>
+    <link rel="stylesheet" href="./src/styles.css">
 </head>
 <body>
-    <div class="header">
-        <h1>Somnia SWAP CRPTHZ to FDRMCT</h1>
-        <p id="network-status">Please connect to Somnia Testnet</p>
-        <p id="wallet-address">No wallet connected</p>
-    </div>
+    <h1>Somnia SWAP CRPTHZ to FDRMCT</h1>
+    
+    <button id="connectWallet">Connect Wallet</button>
+    <p>Wallet: <span id="walletAddress">Not connected</span></p>
 
-    <div class="content">
-        <button id="connect-wallet">Connect Wallet</button>
-    </div>
+    <input type="number" id="amount" placeholder="Enter amount">
+    <button id="swap">Swap</button>
 
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.8.0/dist/ethers.umd.min.js"></script>
-    <script src="main.js"></script>
+    <p id="loading" style="display:none;">Processing...</p>
+
+    <script type="module" src="./src/app.js"></script>
 </body>
 </html>
