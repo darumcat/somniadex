@@ -37,10 +37,9 @@ export class Wallet {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
             
-            // Проверяем chainId
             const network = await provider.getNetwork();
-            if (network.chainId !== 1) { // Замените на ваш chainId
-                console.warn("You are not on the main network");
+            if (network.chainId !== CONFIG.NETWORK.chainId) {
+                throw new Error(`Please switch to ${CONFIG.NETWORK.name} network`);
             }
 
             localStorage.setItem('walletConnected', 'true');
@@ -99,7 +98,6 @@ export class Wallet {
     static async disconnect() {
         try {
             if (window.ethereum) {
-                // Удаляем все листенеры
                 window.ethereum.removeAllListeners();
                 
                 try {
