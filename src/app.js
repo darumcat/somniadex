@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'; // Убедимся, что импорт есть
 import { Wallet } from './wallet.js';
 import { UI } from './ui.js';
 import { CONFIG } from './config.js';
@@ -177,3 +178,33 @@ class App {
 document.addEventListener('DOMContentLoaded', () => {
     new App();
 });
+ async mintToken(tokenName) {
+        try {
+            const buttonId = `mint-${tokenName.toLowerCase()}`;
+            const button = document.getElementById(buttonId);
+            
+            button.disabled = true;
+            button.textContent = 'Minting...';
+            
+            // Добавляем проверку на существование ethers
+            if (!window.ethers && !ethers) {
+                throw new Error("Ethers.js not loaded");
+            }
+            
+            const tx = await this.wallet.contracts[tokenName].mint(
+                ethers.utils.parseUnits("1000", 18)
+            );
+            await tx.wait();
+            
+            UI.showSuccess(`Successfully minted 1000 ${tokenName}`);
+        } catch (error) {
+            UI.showError(`Minting failed: ${error.message}`);
+        } finally {
+            const button = document.getElementById(`mint-${tokenName.toLowerCase()}`);
+            if (button) {
+                button.disabled = false;
+                button.textContent = `Mint ${tokenName}`;
+            }
+        }
+    }
+}
