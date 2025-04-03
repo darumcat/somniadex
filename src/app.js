@@ -19,7 +19,7 @@ document.getElementById('swap').addEventListener('click', async () => {
         showLoading();
 
         // Выполнить обмен
-        await swapTokens(amount, 'FDRMCT', 'CRPTHZ');
+        await swapTokens(amount, '0x5a631147bE09F4af9f4f1E817e304D12bDD6Eb22', '0x9757112F515f6c3c8dCe912b595667780F67B3E8');
     } catch (error) {
         console.error("Swap failed:", error);
     } finally {
