@@ -3,19 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Somnia DEX | CRPTHZ ↔ FDRMCT</title>
+    <title>Somnia SWAP | CRPTHZ to FDRMCT</title>
     <link rel="stylesheet" href="./src/styles.css">
-    <!-- Добавляем резервную загрузку ethers -->
-    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js" 
-            integrity="sha384-+M/5V7Z5f6k+B7M5o4q6vDZ4ZkX4F6Z5f5Jl5f5F5f5F5f5F5f5F5f5F5f5F5f5F" 
-            crossorigin="anonymous"
-            onerror="loadEthersFallback()"></script>
-    <script>
-        function loadEthersFallback() {
-            console.log('Using fallback ethers.js');
-            document.write('<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"><\/script>');
-        }
-    </script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -48,31 +38,6 @@
                 <div id="expected-amount" class="fixed-amount">0.0</div>
             </div>
             <button id="swap-btn" class="btn" style="width: 100%;" disabled>Swap</button>
-        </div>
-        
-        <div class="section">
-            <h2>Mint Tokens</h2>
-            <div class="divider"></div>
-            
-            <div class="mint-section">
-                <div class="mint-card">
-                    <img src="./public/assets/fdrmct.png" alt="FDRMCT Token" class="token-icon" id="fdrmct-icon">
-                    <h3>Mint FDRMCT</h3>
-                    <div class="input-group">
-                        <div class="fixed-amount">1000 FDRMCT</div>
-                    </div>
-                    <button id="mint-fdrmct" class="btn" style="width: 100%;" disabled>Mint FDRMCT</button>
-                </div>
-                
-                <div class="mint-card">
-                    <img src="./public/assets/crpthz.png" alt="CRPTHZ Token" class="token-icon" id="crpthz-icon">
-                    <h3>Mint CRPTHZ</h3>
-                    <div class="input-group">
-                        <div class="fixed-amount">1000 CRPTHZ</div>
-                    </div>
-                    <button id="mint-crpthz" class="btn" style="width: 100%;" disabled>Mint CRPTHZ</button>
-                </div>
-            </div>
         </div>
     </div>
 
