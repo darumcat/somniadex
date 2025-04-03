@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'; // Убедимся, что импорт есть
+import { ethers } from 'ethers';
 import { Wallet } from './wallet.js';
 import { UI } from './ui.js';
 import { CONFIG } from './config.js';
@@ -11,7 +11,6 @@ class App {
     }
 
     async initEventListeners() {
-        // Wallet connection
         document.getElementById('connect-wallet').addEventListener('click', async () => {
             if (!this.wallet) {
                 await this.connectWallet();
@@ -20,7 +19,6 @@ class App {
             }
         });
 
-        // Mint buttons
         document.getElementById('mint-fdrmct').addEventListener('click', async () => {
             await this.mintToken('FDRMCT');
         });
@@ -29,17 +27,14 @@ class App {
             await this.mintToken('CRPTHZ');
         });
 
-        // Swap button
         document.getElementById('swap-btn').addEventListener('click', async () => {
             await this.executeSwap();
         });
 
-        // Amount input
         document.getElementById('swap-amount').addEventListener('input', async () => {
             await this.updateQuote();
         });
 
-        // Token selection
         document.getElementById('from-token').addEventListener('change', async () => {
             await this.updateQuote();
         });
@@ -66,6 +61,7 @@ class App {
             this.wallet = await Wallet.connect();
             UI.updateWalletInfo(this.wallet.address);
             UI.enableButtons();
+            UI.showSuccess("Wallet connected successfully");
         } catch (error) {
             UI.showError(error.message);
         }
@@ -73,10 +69,15 @@ class App {
 
     async disconnectWallet() {
         try {
-            await Wallet.disconnect();
-            this.wallet = null;
-            UI.resetWalletInfo();
-            UI.disableButtons();
+            const success = await Wallet.disconnect();
+            if (success) {
+                this.wallet = null;
+                UI.resetWalletInfo();
+                UI.disableButtons();
+                UI.showSuccess("Wallet disconnected successfully");
+            } else {
+                UI.showError("Disconnection failed");
+            }
         } catch (error) {
             UI.showError(error.message);
         }
@@ -90,7 +91,9 @@ class App {
             button.disabled = true;
             button.textContent = 'Minting...';
             
-            const tx = await this.wallet.contracts[tokenName].mint(ethers.utils.parseUnits("1000", 18));
+            const tx = await this.wallet.contracts[tokenName].mint(
+                ethers.utils.parseUnits("1000", 18)
+            );
             await tx.wait();
             
             UI.showSuccess(`Successfully minted 1000 ${tokenName}`);
@@ -124,7 +127,8 @@ class App {
             );
             
             const formattedAmount = ethers.utils.formatUnits(amountOut, 18);
-            document.getElementById('expected-amount').textContent = parseFloat(formattedAmount).toFixed(4);
+            document.getElementById('expected-amount').textContent = 
+                parseFloat(formattedAmount).toFixed(4);
         } catch (error) {
             console.error("Quote error:", error);
             document.getElementById('expected-amount').textContent = 'Error';
@@ -148,7 +152,6 @@ class App {
             swapBtn.disabled = true;
             swapBtn.textContent = 'Swapping...';
             
-            // Approve token spending
             const amountIn = ethers.utils.parseUnits(amount, 18);
             const approveTx = await this.wallet.contracts[fromToken].approve(
                 CONFIG.DEX.address,
@@ -156,7 +159,6 @@ class App {
             );
             await approveTx.wait();
             
-            // Execute swap
             const swapTx = await this.wallet.contracts.DEX.swap(
                 CONFIG.TOKENS[fromToken].address,
                 amountIn
@@ -174,37 +176,6 @@ class App {
     }
 }
 
-// Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new App();
 });
- async mintToken(tokenName) {
-        try {
-            const buttonId = `mint-${tokenName.toLowerCase()}`;
-            const button = document.getElementById(buttonId);
-            
-            button.disabled = true;
-            button.textContent = 'Minting...';
-            
-            // Добавляем проверку на существование ethers
-            if (!window.ethers && !ethers) {
-                throw new Error("Ethers.js not loaded");
-            }
-            
-            const tx = await this.wallet.contracts[tokenName].mint(
-                ethers.utils.parseUnits("1000", 18)
-            );
-            await tx.wait();
-            
-            UI.showSuccess(`Successfully minted 1000 ${tokenName}`);
-        } catch (error) {
-            UI.showError(`Minting failed: ${error.message}`);
-        } finally {
-            const button = document.getElementById(`mint-${tokenName.toLowerCase()}`);
-            if (button) {
-                button.disabled = false;
-                button.textContent = `Mint ${tokenName}`;
-            }
-        }
-    }
-}
