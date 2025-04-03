@@ -4,40 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Somnia DEX</title>
-    <link rel="icon" href="/assets/favicon.ico" />
-    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
     <header>
-        <img src="/assets/logo.png" alt="Logo" class="banner-logo" />
+        <img src="assets/logo.png" alt="Logo" id="logo">
+        <h1>Somnia DEX</h1>
     </header>
-
     <main>
-        <div id="app">
-            <button id="connectWalletButton">Connect Wallet</button>
-            <div id="walletAddress"></div>
+        <button id="connectWallet">Connect Wallet</button>
+        <div id="walletAddress">Not connected</div>
+        <div id="loading" style="display:none;">Loading...</div>
 
-            <div class="token-swap">
-                <input type="number" id="amount" placeholder="Amount" />
-                <select id="fromToken">
-                    <option value="FDRMCT">FDRMCT</option>
-                    <option value="CRPTHZ">CRPTHZ</option>
-                </select>
-                <span>to</span>
-                <select id="toToken">
-                    <option value="CRPTHZ">CRPTHZ</option>
-                    <option value="FDRMCT">FDRMCT</option>
-                </select>
-                <button id="swapButton">Swap</button>
-            </div>
+        <div>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" placeholder="Enter amount" />
+        </div>
 
-            <div id="loading" class="loading">Loading...</div>
+        <div>
+            <button id="swapFDRMCT">Swap FDRMCT to CRPTHZ</button>
+            <button id="swapCRPTHZ">Swap CRPTHZ to FDRMCT</button>
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.0/dist/ethers.umd.min.js"></script>
-    <script src="/src/app.js"></script>
-    <script src="/src/wallet.js"></script>
-    <script src="/src/ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+    <script type="module" src="src/app.js"></script>
 </body>
 </html>
