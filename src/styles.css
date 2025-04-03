@@ -144,46 +144,6 @@ h1 {
     text-align: center;
 }
 
-.mint-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.mint-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    padding: 1.5rem;
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-.mint-card:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-5px);
-}
-
-.mint-card h3 {
-    margin-bottom: 1rem;
-    color: var(--secondary);
-    font-size: 1.3rem;
-}
-
-.token-icon {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 1rem;
-    display: block;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.divider {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.1);
-    margin: 1.5rem 0;
-}
-
 @media (max-width: 768px) {
     .container {
         padding: 1.5rem;
@@ -191,9 +151,5 @@ h1 {
     
     h1 {
         font-size: 2rem;
-    }
-    
-    .mint-section {
-        grid-template-columns: 1fr;
     }
 }
