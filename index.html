@@ -3,32 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Somnia SWAP</title>
+    <title>Somnia DEX</title>
     <link rel="stylesheet" href="./src/styles.css">
 </head>
 <body>
-    <h1>Somnia SWAP CRPTHZ to FDRMCT</h1>
-    
-    <button id="connectWallet">Connect Wallet</button>
-    <p>Wallet: <span id="walletAddress">Not connected</span></p>
+    <div class="container">
+        <header>
+            <h1>Somnia DEX</h1>
+            <div class="wallet-section">
+                <button id="connectWallet" class="wallet-button">Connect Wallet</button>
+                <div id="walletAddress" class="wallet-address">Not connected</div>
+            </div>
+        </header>
 
-    <input type="number" id="amount" placeholder="Enter amount">
-    <button id="swap">Swap</button>
+        <main class="dex-interface">
+            <div class="swap-section">
+                <h2>Swap Tokens</h2>
+                <div class="token-selector">
+                    <div class="token-from">
+                        <img src="./assets/fdrmct.png" alt="FDRMCT" class="token-icon">
+                        <select id="fromToken">
+                            <option value="FDRMCT">FDRMCT</option>
+                            <option value="CRPTHZ">CRPTHZ</option>
+                        </select>
+                        <input type="number" id="fromAmount" placeholder="0.0">
+                    </div>
+                    <div class="swap-arrow">⇄</div>
+                    <div class="token-to">
+                        <img src="./assets/crpthz.png" alt="CRPTHZ" class="token-icon">
+                        <select id="toToken">
+                            <option value="CRPTHZ">CRPTHZ</option>
+                            <option value="FDRMCT">FDRMCT</option>
+                        </select>
+                        <input type="number" id="toAmount" placeholder="0.0" readonly>
+                    </div>
+                </div>
+                <button id="swapBtn" class="action-button">Swap</button>
+            </div>
 
-    <h2>Mint Tokens</h2>
-    <div>
-        <h3>Mint FDRMCT</h3>
-        <input type="number" id="mintAmountFDRMCT" placeholder="Amount to mint">
-        <button id="mintFDRMCT">Mint FDRMCT</button>
+            <div class="mint-section">
+                <h2>Mint Tokens</h2>
+                <div class="mint-buttons">
+                    <button id="mintFDRMCT" class="mint-button">
+                        <img src="./assets/fdrmct.png" alt="FDRMCT">
+                        Mint FDRMCT
+                    </button>
+                    <button id="mintCRPTHZ" class="mint-button">
+                        <img src="./assets/crpthz.png" alt="CRPTHZ">
+                        Mint CRPTHZ
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <div id="status" class="status-box">Ready to connect</div>
+        <div id="loading" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p>Processing transaction...</p>
+        </div>
     </div>
-
-    <div>
-        <h3>Mint CRPTHZ</h3>
-        <input type="number" id="mintAmountCRPTHZ" placeholder="Amount to mint">
-        <button id="mintCRPTHZ">Mint CRPTHZ</button>
-    </div>
-
-    <p id="loading" style="display:none;">Processing...</p>
 
     <script type="module" src="./src/app.js"></script>
 </body>
