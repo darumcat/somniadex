@@ -136,8 +136,11 @@ class App {
     }
 
     async executeSwap() {
-        if (!this.wallet) return;
-        
+        if (!this.wallet) {
+            UI.showError("Wallet not connected");
+            return;
+        }
+
         const fromToken = document.getElementById('from-token').value;
         const toToken = document.getElementById('to-token').value;
         const amount = document.getElementById('swap-amount').value;
@@ -146,32 +149,55 @@ class App {
             UI.showError("Please enter a valid amount");
             return;
         }
-        
+
         try {
             const swapBtn = document.getElementById('swap-btn');
             swapBtn.disabled = true;
             swapBtn.textContent = 'Swapping...';
+
+            // 1. Получаем адрес пользователя
+            const userAddress = this.wallet.address;
             
+            // 2. Проверяем баланс перед свапом
+            const balanceBefore = await Wallet.getTokenBalance(toToken, userAddress);
+
+            // 3. Выполняем approve
             const amountIn = ethers.utils.parseUnits(amount, 18);
             const approveTx = await this.wallet.contracts[fromToken].approve(
                 CONFIG.DEX.address,
                 amountIn
             );
             await approveTx.wait();
-            
+
+            // 4. Выполняем swap (токены придут пользователю)
             const swapTx = await this.wallet.contracts.DEX.swap(
                 CONFIG.TOKENS[fromToken].address,
-                amountIn
+                amountIn,
+                { gasLimit: 500000 } // Добавляем лимит газа
             );
             await swapTx.wait();
-            
-            UI.showSuccess("Swap executed successfully!");
+
+            // 5. Проверяем, что токены получены
+            const balanceAfter = await Wallet.getTokenBalance(toToken, userAddress);
+            const receivedAmount = balanceAfter.sub(balanceBefore);
+
+            if (receivedAmount.gt(0)) {
+                UI.showSuccess(
+                    `Success! Received ${ethers.utils.formatUnits(receivedAmount, 18)} ${toToken}`
+                );
+            } else {
+                UI.showError("Swap completed but no tokens received");
+            }
+
         } catch (error) {
+            console.error("Swap error:", error);
             UI.showError(`Swap failed: ${error.message}`);
         } finally {
             const swapBtn = document.getElementById('swap-btn');
-            swapBtn.disabled = false;
-            swapBtn.textContent = 'Swap';
+            if (swapBtn) {
+                swapBtn.disabled = false;
+                swapBtn.textContent = 'Swap';
+            }
         }
     }
 }
