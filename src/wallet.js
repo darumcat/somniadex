@@ -42,10 +42,8 @@ async function swapTokens(amount, fromToken, toToken) {
         );
         await tx.wait();
         console.log("Swap successful");
-        updateUI("swapStatus", "Swap completed successfully!");
     } catch (error) {
         console.error("Swap failed:", error);
-        updateUI("swapStatus", "Swap failed. See console for details.");
     }
     hideLoading();
 }
