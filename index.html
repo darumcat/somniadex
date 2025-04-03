@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Somnia DEX | CRPTHZ ↔ FDRMCT</title>
     <link rel="stylesheet" href="./src/styles.css">
+    <!-- Добавляем резервную загрузку ethers -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js" 
+            integrity="sha384-+M/5V7Z5f6k+B7M5o4q6vDZ4ZkX4F6Z5f5Jl5f5F5f5F5f5F5f5F5f5F5f5F5f5F" 
+            crossorigin="anonymous"
+            onerror="loadEthersFallback()"></script>
+    <script>
+        function loadEthersFallback() {
+            console.log('Using fallback ethers.js');
+            document.write('<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"><\/script>');
+        }
+    </script>
 </head>
 <body>
     <div class="container">
