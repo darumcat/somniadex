@@ -10,9 +10,11 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html')
       }
-    }
+    },
+    minify: 'terser',
+    sourcemap: false
   },
-  optimizeDeps: {
-    include: ['ethers']
+  server: {
+    port: 3000
   }
 });
