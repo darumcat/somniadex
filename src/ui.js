@@ -1,20 +1,12 @@
 export function updateUI(elementId, value) {
     const element = document.getElementById(elementId);
-    if (element) {
-        element.textContent = value;
-    }
+    if (element) element.textContent = value;
 }
 
 export function showLoading() {
-    const loadingElement = document.getElementById("loading");
-    if (loadingElement) {
-        loadingElement.style.display = "block";
-    }
+    document.getElementById("loading").style.display = "block";
 }
 
 export function hideLoading() {
-    const loadingElement = document.getElementById("loading");
-    if (loadingElement) {
-        loadingElement.style.display = "none";
-    }
+    document.getElementById("loading").style.display = "none";
 }
