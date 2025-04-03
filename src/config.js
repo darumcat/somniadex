@@ -1,98 +1,41 @@
+export const CONTRACTS = {
+    FDRMCT: "0x5a631147bE09F4af9f4f1E817e304D12bDD6Eb22",
+    CRPTHZ: "0x9757112F515f6c3c8dCe912b595667780F67B3E8",
+    DEX: "0x3344f77ce1d16a8e223fbb53bf4d1d01384eb8f4"
+};
+
 export const PROVIDER_URL = "https://dream-rpc.somnia.network/";
+
 export const DEX_ABI = [
-    // ABI для вашего DEX контракта
     {
-        "constant": true,
         "inputs": [
-            {
-                "name": "",
-                "type": "address"
-            },
-            {
-                "name": "",
-                "type": "address"
-            }
+            {"internalType": "address", "name": "_tokenA", "type": "address"},
+            {"internalType": "address", "name": "_tokenB", "type": "address"}
         ],
-        "name": "getSwapRate",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        "stateMutability": "nonpayable",
+        "type": "constructor"
     },
     {
-        "constant": false,
         "inputs": [
-            {
-                "name": "fromToken",
-                "type": "address"
-            },
-            {
-                "name": "toToken",
-                "type": "address"
-            },
-            {
-                "name": "amount",
-                "type": "uint256"
-            }
+            {"internalType": "address", "name": "fromToken", "type": "address"},
+            {"internalType": "address", "name": "toToken", "type": "address"},
+            {"internalType": "uint256", "name": "amount", "type": "uint256"}
         ],
         "name": "swap",
         "outputs": [],
-        "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
     }
 ];
 
-export const FDRMCT_ABI = [
-    // ABI для контракта FDRMCT
+export const TOKEN_ABI = [
     {
-        "constant": false,
         "inputs": [
-            {
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "name": "amount",
-                "type": "uint256"
-            }
+            {"internalType": "address", "name": "to", "type": "address"}
         ],
         "name": "mint",
         "outputs": [],
-        "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
     }
 ];
-
-export const CRPTHZ_ABI = [
-    // ABI для контракта CRPTHZ
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "mint",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    }
-];
-
-export const TOKEN_ADDRESSES = {
-    FDRMCT: "0x5a631147bE09F4af9f4f1E817e304D12bDD6Eb22",
-    CRPTHZ: "0x9757112F515f6c3c8dCe912b595667780F67B3E8"
-};
