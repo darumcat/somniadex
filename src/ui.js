@@ -1,16 +1,20 @@
-function updateUI(elementId, content) {
+export function updateUI(elementId, value) {
     const element = document.getElementById(elementId);
-    if (element) element.textContent = content;
+    if (element) {
+        element.textContent = value;
+    }
 }
 
-function showLoading() {
-    const loader = document.getElementById("loadingIndicator");
-    if (loader) loader.style.display = "block";
+export function showLoading() {
+    const loadingElement = document.getElementById("loading");
+    if (loadingElement) {
+        loadingElement.style.display = "block";
+    }
 }
 
-function hideLoading() {
-    const loader = document.getElementById("loadingIndicator");
-    if (loader) loader.style.display = "none";
+export function hideLoading() {
+    const loadingElement = document.getElementById("loading");
+    if (loadingElement) {
+        loadingElement.style.display = "none";
+    }
 }
-
-export { updateUI, showLoading, hideLoading };
