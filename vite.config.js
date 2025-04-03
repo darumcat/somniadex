@@ -5,7 +5,7 @@ export default defineConfig({
   base: './',
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
+    assetsDir: 'assets',
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html')
@@ -13,7 +13,6 @@ export default defineConfig({
     }
   },
   server: {
-    port: 3000,
-    strictPort: true
+    port: 3000
   }
 });
