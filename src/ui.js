@@ -17,14 +17,10 @@ export class UI {
 
     static enableButtons() {
         document.getElementById('swap-btn').disabled = false;
-        document.getElementById('mint-fdrmct').disabled = false;
-        document.getElementById('mint-crpthz').disabled = false;
     }
 
     static disableButtons() {
         document.getElementById('swap-btn').disabled = true;
-        document.getElementById('mint-fdrmct').disabled = true;
-        document.getElementById('mint-crpthz').disabled = true;
     }
 
     static showError(message) {
