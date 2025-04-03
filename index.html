@@ -11,6 +11,7 @@
             --dark: #1e1e2e;
             --light: #f8f9fa;
             --success: #28a745;
+            --error: #dc3545;
         }
         
         * {
@@ -49,35 +50,21 @@
         }
         
         .wallet-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
+            text-align: center;
         }
         
         .wallet-info {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
+            margin-bottom: 1rem;
         }
         
-        .wallet-connected {
-            color: var(--success);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .wallet-connected::before {
-            content: "";
-            display: block;
-            width: 10px;
-            height: 10px;
-            background-color: var(--success);
-            border-radius: 50%;
+        .wallet-address {
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 0.5rem;
         }
         
         .btn {
@@ -90,6 +77,7 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(74, 107, 255, 0.4);
+            margin: 0.5rem 0;
         }
         
         .btn:hover {
@@ -101,11 +89,19 @@
             transform: translateY(0);
         }
         
-        .swap-section {
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .section {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 1.5rem;
             margin-bottom: 2rem;
+            text-align: center;
         }
         
         .input-group {
@@ -119,6 +115,17 @@
             opacity: 0.8;
         }
         
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+        }
+        
         .fixed-amount {
             width: 100%;
             padding: 1rem;
@@ -129,6 +136,7 @@
             font-size: 1rem;
             pointer-events: none;
             user-select: none;
+            text-align: center;
         }
         
         .mint-section {
@@ -142,6 +150,7 @@
             border-radius: 15px;
             padding: 1.5rem;
             transition: all 0.3s ease;
+            text-align: center;
         }
         
         .mint-card:hover {
@@ -155,6 +164,21 @@
             font-size: 1.3rem;
         }
         
+        .token-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            display: block;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 1.5rem 0;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 1.5rem;
@@ -162,11 +186,6 @@
             
             h1 {
                 font-size: 2rem;
-            }
-            
-            .wallet-section {
-                flex-direction: column;
-                align-items: stretch;
             }
             
             .mint-section {
@@ -181,56 +200,110 @@
         
         <div class="wallet-section">
             <div class="wallet-info">
-                <span>Wallet:</span>
-                <span class="wallet-connected">Connected (0x7f...3a4b)</span>
+                <p>Wallet status: <span id="wallet-status">Not connected</span></p>
+                <div id="wallet-address" class="wallet-address" style="display: none;"></div>
             </div>
-            <button class="btn">Connect Wallet</button>
+            <button id="connect-wallet" class="btn">Connect Wallet</button>
         </div>
         
-        <div class="swap-section">
+        <div class="section">
+            <h2>Enter amount</h2>
             <div class="input-group">
-                <label for="swap-amount">Enter amount</label>
-                <input type="number" id="swap-amount" class="fixed-amount" placeholder="0.0" disabled>
+                <input type="number" id="swap-amount" class="input-field" placeholder="0.0" value="0.0" disabled>
             </div>
-            <button class="btn" style="width: 100%;">Swap</button>
         </div>
         
-        <h2 style="margin-bottom: 1.5rem; text-align: center; color: var(--secondary);">Mint Tokens</h2>
+        <div class="section">
+            <button id="swap-btn" class="btn" style="width: 100%;" disabled>Swap</button>
+        </div>
         
-        <div class="mint-section">
-            <div class="mint-card">
-                <h3>Mint FDRMCT</h3>
-                <div class="input-group">
-                    <label>Fixed mint amount</label>
-                    <div class="fixed-amount">1000 FDRMCT</div>
-                </div>
-                <button class="btn" style="width: 100%;">Mint FDRMCT</button>
-            </div>
+        <div class="section">
+            <h2>Mint Tokens</h2>
+            <div class="divider"></div>
             
-            <div class="mint-card">
-                <h3>Mint CRPTHZ</h3>
-                <div class="input-group">
-                    <label>Fixed mint amount</label>
-                    <div class="fixed-amount">1000 CRPTHZ</div>
+            <div class="mint-section">
+                <div class="mint-card">
+                    <img src="/assets/fdrmct.png" alt="FDRMCT Token" class="token-icon" id="fdrmct-icon">
+                    <h3>Mint FDRMCT</h3>
+                    <div class="input-group">
+                        <div class="fixed-amount">1000 FDRMCT</div>
+                    </div>
+                    <button id="mint-fdrmct" class="btn" style="width: 100%;" disabled>Mint FDRMCT</button>
                 </div>
-                <button class="btn" style="width: 100%;">Mint CRPTHZ</button>
+                
+                <div class="mint-card">
+                    <img src="/assets/crpthz.png" alt="CRPTHZ Token" class="token-icon" id="crpthz-icon">
+                    <h3>Mint CRPTHZ</h3>
+                    <div class="input-group">
+                        <div class="fixed-amount">1000 CRPTHZ</div>
+                    </div>
+                    <button id="mint-crpthz" class="btn" style="width: 100%;" disabled>Mint CRPTHZ</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Disable all number inputs to prevent changes
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('keydown', (e) => {
-                e.preventDefault();
-                return false;
-            });
+        // Wallet connection simulation
+        document.getElementById('connect-wallet').addEventListener('click', function() {
+            // Simulate wallet connection
+            const walletAddress = '0x7f5c5c3a4b2e1d0c9f8a7b6c5d4e3f2a1b0c9d8';
+            const shortAddress = walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4);
             
-            input.addEventListener('wheel', (e) => {
-                e.preventDefault();
-                return false;
-            });
+            document.getElementById('wallet-status').textContent = 'Connected';
+            document.getElementById('wallet-status').style.color = 'var(--success)';
+            document.getElementById('wallet-address').textContent = shortAddress;
+            document.getElementById('wallet-address').style.display = 'inline-block';
+            document.getElementById('connect-wallet').textContent = 'Disconnect';
+            
+            // Enable all buttons after wallet connection
+            document.getElementById('swap-btn').disabled = false;
+            document.getElementById('mint-fdrmct').disabled = false;
+            document.getElementById('mint-crpthz').disabled = false;
+            
+            // Update click handler for disconnect
+            this.onclick = function() {
+                document.getElementById('wallet-status').textContent = 'Not connected';
+                document.getElementById('wallet-status').style.color = '';
+                document.getElementById('wallet-address').style.display = 'none';
+                document.getElementById('connect-wallet').textContent = 'Connect Wallet';
+                
+                // Disable all buttons after disconnection
+                document.getElementById('swap-btn').disabled = true;
+                document.getElementById('mint-fdrmct').disabled = true;
+                document.getElementById('mint-crpthz').disabled = true;
+                
+                // Restore original click handler
+                this.onclick = arguments.callee;
+            };
         });
+        
+        // Swap functionality
+        document.getElementById('swap-btn').addEventListener('click', function() {
+            alert('Swap functionality will be executed here');
+            // Add your actual swap logic here
+        });
+        
+        // Mint FDRMCT functionality
+        document.getElementById('mint-fdrmct').addEventListener('click', function() {
+            alert('Minting 1000 FDRMCT tokens');
+            // Add your actual minting logic here
+        });
+        
+        // Mint CRPTHZ functionality
+        document.getElementById('mint-crpthz').addEventListener('click', function() {
+            alert('Minting 1000 CRPTHZ tokens');
+            // Add your actual minting logic here
+        });
+        
+        // Handle token image errors
+        document.getElementById('fdrmct-icon').onerror = function() {
+            this.src = 'https://via.placeholder.com/64?text=FDRMCT';
+        };
+        
+        document.getElementById('crpthz-icon').onerror = function() {
+            this.src = 'https://via.placeholder.com/64?text=CRPTHZ';
+        };
     </script>
 </body>
 </html>
