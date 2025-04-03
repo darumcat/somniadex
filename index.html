@@ -3,66 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Somnia DEX</title>
-    <link rel="stylesheet" href="./src/styles.css">
+    <title>Somnia SWAP | CRPTHZ to FDRMCT</title>
+    <style>
+        :root {
+            --primary: #6e45e2;
+            --secondary: #88d3ce;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 2.5rem;
+        }
+        
+        .wallet-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .wallet-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .wallet-connected {
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .wallet-connected::before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--success);
+            border-radius: 50%;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(110, 69, 226, 0.4);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(110, 69, 226, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .swap-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(110, 69, 226, 0.3);
+        }
+        
+        .mint-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .mint-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .mint-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .mint-card h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            font-size: 1.3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .wallet-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .mint-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Somnia DEX</h1>
-            <div class="wallet-section">
-                <button id="connectWallet" class="wallet-button">Connect Wallet</button>
-                <div id="walletAddress" class="wallet-address">Not connected</div>
+        <h1>Somnia SWAP CRPTHZ to FDRMCT</h1>
+        
+        <div class="wallet-section">
+            <div class="wallet-info">
+                <span>Wallet:</span>
+                <span class="wallet-connected">Connected (0x7f...3a4b)</span>
             </div>
-        </header>
-
-        <main class="dex-interface">
-            <div class="swap-section">
-                <h2>Swap Tokens</h2>
-                <div class="token-selector">
-                    <div class="token-from">
-                        <img src="./assets/fdrmct.png" alt="FDRMCT" class="token-icon">
-                        <select id="fromToken">
-                            <option value="FDRMCT">FDRMCT</option>
-                            <option value="CRPTHZ">CRPTHZ</option>
-                        </select>
-                        <input type="number" id="fromAmount" placeholder="0.0">
-                    </div>
-                    <div class="swap-arrow">⇄</div>
-                    <div class="token-to">
-                        <img src="./assets/crpthz.png" alt="CRPTHZ" class="token-icon">
-                        <select id="toToken">
-                            <option value="CRPTHZ">CRPTHZ</option>
-                            <option value="FDRMCT">FDRMCT</option>
-                        </select>
-                        <input type="number" id="toAmount" placeholder="0.0" readonly>
-                    </div>
+            <button class="btn">Connect Wallet</button>
+        </div>
+        
+        <div class="swap-section">
+            <div class="input-group">
+                <label for="swap-amount">Enter amount</label>
+                <input type="number" id="swap-amount" class="input-field" placeholder="0.0">
+            </div>
+            <button class="btn" style="width: 100%;">Swap</button>
+        </div>
+        
+        <h2 style="margin-bottom: 1.5rem; text-align: center; color: var(--secondary);">Mint Tokens</h2>
+        
+        <div class="mint-section">
+            <div class="mint-card">
+                <h3>Mint FDRMCT</h3>
+                <div class="input-group">
+                    <label for="mint-fdrmct">Amount to mint</label>
+                    <input type="number" id="mint-fdrmct" class="input-field" placeholder="0.0">
                 </div>
-                <button id="swapBtn" class="action-button">Swap</button>
+                <button class="btn" style="width: 100%;">Mint FDRMCT</button>
             </div>
-
-            <div class="mint-section">
-                <h2>Mint Tokens</h2>
-                <div class="mint-buttons">
-                    <button id="mintFDRMCT" class="mint-button">
-                        <img src="./assets/fdrmct.png" alt="FDRMCT">
-                        Mint FDRMCT
-                    </button>
-                    <button id="mintCRPTHZ" class="mint-button">
-                        <img src="./assets/crpthz.png" alt="CRPTHZ">
-                        Mint CRPTHZ
-                    </button>
+            
+            <div class="mint-card">
+                <h3>Mint CRPTHZ</h3>
+                <div class="input-group">
+                    <label for="mint-crpthz">Amount to mint</label>
+                    <input type="number" id="mint-crpthz" class="input-field" placeholder="0.0">
                 </div>
+                <button class="btn" style="width: 100%;">Mint CRPTHZ</button>
             </div>
-        </main>
-
-        <div id="status" class="status-box">Ready to connect</div>
-        <div id="loading" class="loading-overlay">
-            <div class="loading-spinner"></div>
-            <p>Processing transaction...</p>
         </div>
     </div>
-
-    <script type="module" src="./src/app.js"></script>
 </body>
 </html>
