@@ -1,37 +1,31 @@
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #00c6ff, #0072ff); /* Градиент от синего к фиолетовому */
-    color: white;
+    background-color: #f7f7f7;
     padding: 20px;
 }
 
 button {
-    background-color: #0072ff;
+    padding: 10px;
+    background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
+    margin: 10px 0;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-h1 {
-    font-size: 24px;
-    text-align: center;
-}
-
-input[type="number"] {
+input {
     padding: 10px;
-    font-size: 16px;
-    margin: 10px 0;
+    margin: 5px 0;
+    width: 200px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 #loading {
-    color: yellow;
-    font-size: 18px;
-    text-align: center;
+    color: #ff0000;
 }
