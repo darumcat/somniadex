@@ -48,7 +48,7 @@ const SwapCard = ({ account, isSomniaNetwork }) => {
     }
   };
 
-  return (
+ return (
     <div className="card swap-card">
       <h2>Обмен токенов</h2>
       <div className="input-group">
@@ -58,33 +58,28 @@ const SwapCard = ({ account, isSomniaNetwork }) => {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
-        <select value={fromToken} onChange={(e) => setFromToken(e.target.value)}>
-          <option value="GRTS">
-            <img 
-              src="/assets/grts-logo.png" 
-              alt="GRTS" 
-              className="token-icon"
-            /> GRTS → WNDRS
-          </option>
-          <option value="WNDRS">
-            <img 
-              src="/assets/wndrs-logo.png" 
-              alt="WNDRS" 
-              className="token-icon"
-            /> WNDRS → GRTS
-          </option>
-        </select>
+      </div>
+      <div className="token-selection">
+        <div 
+          className={`token-option ${fromToken === 'GRTS' ? 'active' : ''}`}
+          onClick={() => setFromToken('GRTS')}
+        >
+          <img src="/assets/grts-logo.png" alt="GRTS" className="token-icon" />
+          <span>GRTS → WNDRS</span>
+        </div>
+        <div 
+          className={`token-option ${fromToken === 'WNDRS' ? 'active' : ''}`}
+          onClick={() => setFromToken('WNDRS')}
+        >
+          <img src="/assets/wndrs-logo.png" alt="WNDRS" className="token-icon" />
+          <span>WNDRS → GRTS</span>
+        </div>
       </div>
       <button
         onClick={handleSwap}
         disabled={!account || !isSomniaNetwork || !amount || isSwapping}
       >
-        {isSwapping ? (
-          <>
-            <span className="loading-spinner"></span>
-            Обмен...
-          </>
-        ) : 'Обменять'}
+        {isSwapping ? 'Обмен...' : 'Обменять'}
       </button>
     </div>
   );
