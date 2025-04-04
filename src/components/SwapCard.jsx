@@ -51,12 +51,13 @@ const SwapCard = ({ account, isSomniaNetwork }) => {
       <h2>Token Swap</h2>
       
       <div className="input-section">
-        <label>Swap Amount:</label>
+        <label className="amount-label">Swap Amount:</label>
         <input
           type="number"
           placeholder="Enter amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
+          className="swap-input"
         />
       </div>
 
@@ -67,15 +68,27 @@ const SwapCard = ({ account, isSomniaNetwork }) => {
             className={`direction-btn ${fromToken === 'GRTS' ? 'active' : ''}`}
             onClick={() => setFromToken('GRTS')}
           >
-            <img src="/assets/grts-logo.png" alt="GRTS" />
-            <span>GRTS → WNDRS</span>
+            <div className="token-direction">
+              <div className="token-pair">
+                <img src="/assets/grts-logo.png" alt="GRTS" className="token-icon" />
+                <span className="arrow-icon">→</span>
+                <img src="/assets/wndrs-logo.png" alt="WNDRS" className="token-icon" />
+              </div>
+              <span className="direction-label">GRTS to WNDRS</span>
+            </div>
           </button>
           <button
             className={`direction-btn ${fromToken === 'WNDRS' ? 'active' : ''}`}
             onClick={() => setFromToken('WNDRS')}
           >
-            <img src="/assets/wndrs-logo.png" alt="WNDRS" />
-            <span>WNDRS → GRTS</span>
+            <div className="token-direction">
+              <div className="token-pair">
+                <img src="/assets/wndrs-logo.png" alt="WNDRS" className="token-icon" />
+                <span className="arrow-icon">→</span>
+                <img src="/assets/grts-logo.png" alt="GRTS" className="token-icon" />
+              </div>
+              <span className="direction-label">WNDRS to GRTS</span>
+            </div>
           </button>
         </div>
       </div>
