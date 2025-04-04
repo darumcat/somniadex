@@ -1,0 +1,111 @@
+/* Основные стили */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #1a0033, #4b0082);
+  color: white;
+  min-height: 100vh;
+}
+
+.app {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+button {
+  background: #6e45e2;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.input-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+input, select {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+}
+
+select {
+  cursor: pointer;
+}
+
+.network-alert {
+  background: rgba(255, 59, 48, 0.2);
+  border-left: 4px solid #ff3b30;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.network-alert button {
+  margin-top: 0.5rem;
+  background: #ff3b30;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .app {
+    padding: 1rem;
+  }
+  
+  .dashboard {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .card {
+    max-width: 100%;
+  }
+  
+  header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+.token-logo {
+  max-width: 100%;
+  height: auto;
+ }
+}
