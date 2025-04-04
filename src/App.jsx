@@ -23,10 +23,9 @@ const App = () => {
     }
   };
 
+  // НОВАЯ РЕАЛИЗАЦИЯ connectWallet
   const connectWallet = async () => {
     try {
-      setIsConnecting(true);
-      
       if (!window.ethereum) {
         if (isMobile) {
           setShowMobileGuide(true);
@@ -36,33 +35,33 @@ const App = () => {
         return;
       }
 
+      // Основное изменение: сначала запрашиваем аккаунты
       const accounts = await window.ethereum.request({ 
-        method: 'eth_requestAccounts' 
+        method: 'eth_requestAccounts'  // Это вызовет окно подтверждения в MetaMask
       });
+
+      // Затем проверяем сеть
+      await checkNetwork();
       
       if (accounts.length > 0) {
         setAccount(accounts[0]);
-        await checkNetwork();
       }
     } catch (error) {
       console.error("Connection error:", error);
       alert(`Connection failed: ${error.message}`);
-    } finally {
-      setIsConnecting(false);
     }
   };
 
+  // Остальной код остается без изменений
   useEffect(() => {
     const mobileCheck = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     setIsMobile(mobileCheck);
 
-    // Проверка возврата из MetaMask
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('metamask_redirect')) {
       setTimeout(connectWallet, 1000);
     }
 
-    // Проверка начального состояния
     const init = async () => {
       await checkNetwork();
       
@@ -76,7 +75,6 @@ const App = () => {
     
     init();
 
-    // Обработчики изменений
     const handleAccountsChanged = (accounts) => {
       setAccount(accounts.length > 0 ? accounts[0] : '');
     };
