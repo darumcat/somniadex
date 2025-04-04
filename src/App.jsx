@@ -12,7 +12,7 @@ const App = () => {
   const checkNetwork = async () => {
     if (window.ethereum) {
       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-      setIsSomniaNetwork(chainId === '0xc4a8'); // 50312 в hex
+      setIsSomniaNetwork(chainId === '0xc488'); // 50312 в hex
     }
   };
 
