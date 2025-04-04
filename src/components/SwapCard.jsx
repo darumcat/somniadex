@@ -20,14 +20,12 @@ const SwapCard = ({ account, isSomniaNetwork }) => {
         signer
       );
 
-      // Approve
       const txApprove = await tokenContract.approve(
         SWAP_CONTRACT.address,
         ethers.parseUnits(amount, 18)
       );
       await txApprove.wait();
 
-      // Swap
       const swapContract = new ethers.Contract(
         SWAP_CONTRACT.address,
         SWAP_CONTRACT.abi,
@@ -38,52 +36,63 @@ const SwapCard = ({ account, isSomniaNetwork }) => {
         : await swapContract.swapWNDRStoGRTS(ethers.parseUnits(amount, 18));
       await swapTx.wait();
 
-      alert('Успешный обмен!');
+      alert('Swap successful!');
       setAmount('');
     } catch (error) {
       console.error(error);
-      alert('Ошибка: ' + error.message);
+      alert('Error: ' + error.message);
     } finally {
       setIsSwapping(false);
     }
   };
 
   return (
-    <div className="card swap-card">
-      <h2>Обмен токенов</h2>
+    <div className="card">
+      <h2>Token Swap</h2>
       
-      <div className="input-group">
-        <label className="amount-label">Количество</label>
+      <div className="input-section">
+        <label>Swap Amount:</label>
         <input
           type="number"
-          placeholder="Введите количество"
+          placeholder="Enter amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
       </div>
-      
-      <div className="token-selection">
-        <div 
-          className={`token-option ${fromToken === 'GRTS' ? 'active' : ''}`}
-          onClick={() => setFromToken('GRTS')}
-        >
-          <img src="/assets/grts-logo.png" alt="GRTS" className="token-icon" />
-          <span className="token-label">GRTS → WNDRS</span>
-        </div>
-        <div 
-          className={`token-option ${fromToken === 'WNDRS' ? 'active' : ''}`}
-          onClick={() => setFromToken('WNDRS')}
-        >
-          <img src="/assets/wndrs-logo.png" alt="WNDRS" className="token-icon" />
-          <span className="token-label">WNDRS → GRTS</span>
+
+      <div className="swap-direction">
+        <h3>Swap Direction:</h3>
+        <div className="direction-options">
+          <button
+            className={`direction-btn ${fromToken === 'GRTS' ? 'active' : ''}`}
+            onClick={() => setFromToken('GRTS')}
+          >
+            <img src="/assets/grts-logo.png" alt="GRTS" />
+            <span>GRTS → WNDRS</span>
+          </button>
+          <button
+            className={`direction-btn ${fromToken === 'WNDRS' ? 'active' : ''}`}
+            onClick={() => setFromToken('WNDRS')}
+          >
+            <img src="/assets/wndrs-logo.png" alt="WNDRS" />
+            <span>WNDRS → GRTS</span>
+          </button>
         </div>
       </div>
-      
+
       <button
+        className="action-btn"
         onClick={handleSwap}
         disabled={!account || !isSomniaNetwork || !amount || isSwapping}
       >
-        {isSwapping ? 'Обмен...' : 'Обменять'}
+        {isSwapping ? (
+          <>
+            <span className="spinner"></span>
+            Swapping...
+          </>
+        ) : (
+          'Swap Tokens'
+        )}
       </button>
     </div>
   );
