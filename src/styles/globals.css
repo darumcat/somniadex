@@ -56,12 +56,39 @@ h1 {
   box-shadow: 0 10px 25px rgba(110, 69, 226, 0.3);
 }
 
+/* Стили для выбора токенов */
+.token-selection {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.token-option {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.token-option:hover {
+  background: rgba(110, 69, 226, 0.2);
+}
+
+.token-option.active {
+  background: rgba(110, 69, 226, 0.4);
+  border: 1px solid #6e45e2;
+}
+
 /* Иконки токенов */
 .token-icon {
   width: 24px;
   height: 24px;
-  vertical-align: middle;
-  margin-right: 8px;
   border-radius: 50%;
   object-fit: contain;
 }
@@ -131,5 +158,9 @@ select {
   header {
     flex-direction: column;
     gap: 1rem;
+  }
+
+  .token-selection {
+    flex-direction: column;
   }
 }
