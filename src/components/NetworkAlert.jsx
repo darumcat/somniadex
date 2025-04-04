@@ -4,7 +4,7 @@ const NetworkAlert = () => {
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [{
-          chainId: '0xc4a8', // 50312 в HEX
+          chainId: '0xc488', // 50312 в HEX
           chainName: 'Somnia Testnet',
           nativeCurrency: {
             name: 'Somnia Test Token',
