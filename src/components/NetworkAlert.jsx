@@ -4,19 +4,29 @@ const NetworkAlert = () => {
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [{
-          chainId: '0xc4a8', // 50312 в hex
+          chainId: '0xc4a8', // 50312 в HEX
           chainName: 'Somnia Testnet',
           nativeCurrency: {
-            name: 'STT',
-            symbol: 'STT',
+            name: 'Somnia Test Token',
+            symbol: 'STT', // Убедитесь, что это правильный символ
             decimals: 18
           },
-          rpcUrls: ['https://dream-rpc.somnia.network/'],
-          blockExplorerUrls: ['https://shannon-explorer.somnia.network/']
+          rpcUrls: ['https://dream-rpc.somnia.network'],
+          blockExplorerUrls: ['https://shannon-explorer.somnia.network/'],
+          iconUrls: ['https://somnia.network/icon.png'] // Опционально
         }]
       });
     } catch (error) {
       console.error('Ошибка переключения сети:', error);
+      
+      // Улучшенная обработка ошибок
+      if (error.code === 4001) {
+        alert('Вы отменили переключение сети');
+      } else if (error.code === -32602) {
+        alert('Некорректные параметры сети. Пожалуйста, сообщите разработчикам.');
+      } else {
+        alert(`Ошибка переключения сети: ${error.message}`);
+      }
     }
   };
 
