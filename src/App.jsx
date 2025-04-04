@@ -18,18 +18,51 @@ const App = () => {
     }
   };
 
-  const connectWallet = async () => {
-    try {
-      if (!window.ethereum) {
-        if (isMobile) {
-          // Специальный URL для мобильных
-          const dappUrl = encodeURIComponent(`${window.location.origin}?metamask_redirect=true`);
-          window.location.href = `https://metamask.app.link/browser/${dappUrl}`;
+const connectWallet = async () => {
+  try {
+    if (!window.ethereum) {
+      if (isMobile) {
+        // Пробуем оба метода для максимальной совместимости
+        try {
+          // 1. Новый метод через WalletConnect
+          const wcUrl = `https://metamask.app.link/wc?uri=${encodeURIComponent(`https://${window.location.hostname}/connect`)}`;
+          
+          // 2. Классический метод как fallback (ваш текущий)
+          const classicUrl = `https://metamask.app.link/browser/${encodeURIComponent(`${window.location.origin}?metamask_redirect=true`)}`;
+          
+          // Сначала пробуем WalletConnect
+          window.location.href = wcUrl;
+          
+          // Если через 1 секунду не сработало - пробуем классический
+          setTimeout(() => {
+            if (!document.hidden) { // Если пользователь не перешел в MetaMask
+              window.location.href = classicUrl;
+            }
+          }, 1000);
+          
           return;
+        } catch (e) {
+          console.error("Redirect error:", e);
         }
-        alert('Please install MetaMask!');
-        return;
       }
+      alert('Please install MetaMask!');
+      return;
+    }
+
+    // Основное подключение (если MetaMask доступен)
+    const accounts = await window.ethereum.request({ 
+      method: 'eth_requestAccounts' 
+    });
+    
+    if (accounts.length > 0) {
+      setAccount(accounts[0]);
+      await checkNetwork();
+    }
+  } catch (error) {
+    console.error("Connection error:", error);
+    alert(`Connection failed: ${error.message}`);
+  }
+};
 
       // Главное изменение - используем eth_requestAccounts
       const accounts = await window.ethereum.request({ 
