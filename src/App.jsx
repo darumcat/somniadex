@@ -8,55 +8,103 @@ import './styles/globals.css';
 const App = () => {
   const [account, setAccount] = useState('');
   const [isSomniaNetwork, setIsSomniaNetwork] = useState(false);
-  const [showMobileWarning, setShowMobileWarning] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showMobileRedirect, setShowMobileRedirect] = useState(false);
 
   const checkNetwork = async () => {
     if (window.ethereum) {
       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-      setIsSomniaNetwork(chainId === '0xc488'); // 50312 в hex
+      setIsSomniaNetwork(chainId === '0xc488');
     }
   };
 
   const connectWallet = async () => {
     if (window.ethereum) {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      setAccount(accounts[0]);
-      await checkNetwork();
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        if (accounts.length > 0) {
+          setAccount(accounts[0]);
+          await checkNetwork();
+        }
+      } catch (error) {
+        console.error("Connection error:", error);
+      }
+    } else if (isMobile) {
+      // Для мобильных без MetaMask открываем Deep Link
+      window.location.href = `https://metamask.app.link/dapp/${window.location.hostname}${window.location.pathname}`;
     } else {
-      alert('Установите MetaMask!');
+      alert('Please install MetaMask!');
     }
   };
 
   useEffect(() => {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    setShowMobileWarning(isMobile && !window.ethereum);
+    const mobileCheck = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    setIsMobile(mobileCheck);
+    
+    if (mobileCheck && !window.ethereum) {
+      setShowMobileRedirect(true);
+    }
+
     checkNetwork();
-    window.ethereum?.on('chainChanged', checkNetwork);
+    
+    const handleAccountsChanged = (accounts) => {
+      if (accounts.length > 0) {
+        setAccount(accounts[0]);
+      } else {
+        setAccount('');
+      }
+    };
+
+    if (window.ethereum) {
+      window.ethereum.on('chainChanged', checkNetwork);
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+    }
+
     return () => {
-      window.ethereum?.removeListener('chainChanged', checkNetwork);
+      if (window.ethereum) {
+        window.ethereum.removeListener('chainChanged', checkNetwork);
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      }
     };
   }, []);
 
+  // Если пользователь вернулся после подключения
+  useEffect(() => {
+    if (window.ethereum && isMobile) {
+      const checkConnection = async () => {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          if (accounts.length > 0) {
+            setAccount(accounts[0]);
+            await checkNetwork();
+          }
+        } catch (error) {
+          console.error("Connection check error:", error);
+        }
+      };
+      
+      checkConnection();
+    }
+  }, [isMobile]);
+
+  if (showMobileRedirect) {
+    return (
+      <div className="mobile-redirect-screen">
+        <h2>Redirecting to MetaMask...</h2>
+        <p>Please connect your wallet in MetaMask</p>
+        <p>You'll be automatically returned to the app</p>
+        <button 
+          onClick={() => window.location.href = `https://metamask.app.link/dapp/${window.location.hostname}${window.location.pathname}`}
+          className="mobile-button"
+        >
+          Open MetaMask Again
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="app">
-      {showMobileWarning && (
-        <div className="mobile-warning">
-          <h3>Для работы с DApp требуется MetaMask</h3>
-          <p>Пожалуйста, откройте этот сайт в браузере MetaMask</p>
-          <button 
-            onClick={() => window.open('https://metamask.app.link/dapp/' + window.location.hostname)}
-            className="mobile-button"
-          >
-            Открыть в MetaMask
-          </button>
-          <button 
-            onClick={() => setShowMobileWarning(false)}
-            className="mobile-button secondary"
-          >
-            Продолжить в браузере (ограниченный функционал)
-          </button>
-        </div>
-      )}
       <Header account={account} connectWallet={connectWallet} />
       {!isSomniaNetwork && <NetworkAlert />}
       <div className="dashboard">
