@@ -34,6 +34,33 @@ h1 {
   margin: 0;
 }
 
+/* Мобильное предупреждение */
+.mobile-warning {
+  background: rgba(255, 59, 48, 0.2);
+  border: 1px solid #ff3b30;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  text-align: center;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.mobile-button {
+  background: linear-gradient(90deg, #6e45e2, #8a2be2);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 8px 4px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.mobile-button.secondary {
+  background: transparent;
+  border: 1px solid #6e45e2;
+}
+
 /* Карточки */
 .dashboard {
   display: grid;
@@ -203,5 +230,10 @@ button:disabled, .action-btn:disabled {
 
   .token-selection, .token-options, .direction-options {
     grid-template-columns: 1fr;
+  }
+
+  .mobile-warning {
+    margin: 1rem;
+    padding: 1rem;
   }
 }
