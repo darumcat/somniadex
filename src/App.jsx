@@ -86,6 +86,8 @@ const connectWallet = async () => {
     const params = new URLSearchParams(window.location.search);
     if (params.has('metamask_redirect') && window.ethereum) {
       connectWallet();
+      // Очищаем URL после использования
+    window.history.replaceState({}, document.title, window.location.pathname);
     }
 
     checkNetwork();
