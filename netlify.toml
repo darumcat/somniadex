@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"  # Стандартная команда Create React App
+  publish = "build"          # Папка сборки (React создаёт её автоматически)
+  base = "./"                # Корень проекта — текущая папка (somnia-swap-dapp/)
+
+[build.environment]
+  BROWSER = "none"           # Отключает открытие браузера
+  NODE_VERSION = "18"        # Совместимо с react-scripts 5.x
+  CI = "true"                # Ускоряет сборку на Netlify
