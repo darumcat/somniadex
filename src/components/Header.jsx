@@ -8,7 +8,7 @@ const Header = ({ account, connectWallet }) => {
         </button>
       ) : (
         <button onClick={connectWallet} className="connect-button">
-          Подключить кошелек
+          Connect Wallet
         </button>
       )}
     </header>
