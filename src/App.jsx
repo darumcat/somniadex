@@ -9,13 +9,17 @@ const App = () => {
   const [account, setAccount] = useState('');
   const [isSomniaNetwork, setIsSomniaNetwork] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [showMobileRedirect, setShowMobileRedirect] = useState(false);
+  const [showMobileGuide, setShowMobileGuide] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
 
   const checkNetwork = async () => {
     if (window.ethereum) {
-      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-      setIsSomniaNetwork(chainId === '0xc488');
+      try {
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        setIsSomniaNetwork(chainId === '0xc488');
+      } catch (error) {
+        console.error("Network check error:", error);
+      }
     }
   };
 
@@ -25,22 +29,20 @@ const App = () => {
       
       if (!window.ethereum) {
         if (isMobile) {
-          setShowMobileRedirect(true);
+          setShowMobileGuide(true);
           return;
         }
         alert('Please install MetaMask!');
         return;
       }
 
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = await window.ethereum.request({ 
+        method: 'eth_requestAccounts' 
+      });
+      
       if (accounts.length > 0) {
         setAccount(accounts[0]);
         await checkNetwork();
-        
-        // Для мобильных - обновляем страницу после подключения
-        if (isMobile) {
-          window.location.reload();
-        }
       }
     } catch (error) {
       console.error("Connection error:", error);
@@ -53,73 +55,77 @@ const App = () => {
   useEffect(() => {
     const mobileCheck = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     setIsMobile(mobileCheck);
-    
-    if (mobileCheck && !window.ethereum) {
-      setShowMobileRedirect(true);
+
+    // Проверка возврата из MetaMask
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('metamask_redirect')) {
+      setTimeout(connectWallet, 1000);
     }
 
-    checkNetwork();
-    
-    const handleAccountsChanged = (accounts) => {
-      if (accounts.length > 0) {
-        setAccount(accounts[0]);
-      } else {
-        setAccount('');
+    // Проверка начального состояния
+    const init = async () => {
+      await checkNetwork();
+      
+      if (window.ethereum) {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) {
+          setAccount(accounts[0]);
+        }
       }
+    };
+    
+    init();
+
+    // Обработчики изменений
+    const handleAccountsChanged = (accounts) => {
+      setAccount(accounts.length > 0 ? accounts[0] : '');
     };
 
     if (window.ethereum) {
-      window.ethereum.on('chainChanged', checkNetwork);
       window.ethereum.on('accountsChanged', handleAccountsChanged);
+      window.ethereum.on('chainChanged', checkNetwork);
       
-      // Проверяем уже подключенные аккаунты
-      const checkInitialConnection = async () => {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-          if (accounts.length > 0) {
-            setAccount(accounts[0]);
-            await checkNetwork();
-          }
-        } catch (error) {
-          console.error("Initial connection check error:", error);
-        }
-      };
-      
-      checkInitialConnection();
-    }
-
-    return () => {
-      if (window.ethereum) {
-        window.ethereum.removeListener('chainChanged', checkNetwork);
+      return () => {
         window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-      }
-    };
+        window.ethereum.removeListener('chainChanged', checkNetwork);
+      };
+    }
   }, []);
 
-  if (showMobileRedirect) {
+  if (showMobileGuide) {
     return (
-      <div className="mobile-redirect-screen">
-        <h2>Redirecting to MetaMask...</h2>
-        <p>Please connect your wallet in MetaMask</p>
-        <p>You'll be automatically returned to the app</p>
+      <div className="mobile-guide">
+        <h2>How to Connect</h2>
+        <div className="guide-steps">
+          <div className="step">
+            <div className="step-number">1</div>
+            <p>Open this link in MetaMask browser</p>
+          </div>
+          <div className="step">
+            <div className="step-number">2</div>
+            <p>Tap the "Connect" button</p>
+          </div>
+          <div className="step">
+            <div className="step-number">3</div>
+            <p>Approve the connection</p>
+          </div>
+        </div>
         <button 
           onClick={() => {
-            const currentUrl = encodeURIComponent(window.location.href);
-            window.location.href = `https://metamask.app.link/dapp/${window.location.hostname}?redirect=${currentUrl}`;
+            const url = encodeURIComponent(window.location.href.split('?')[0]);
+            window.location.href = `https://metamask.app.link/browser?url=${url}`;
           }}
-          className="mobile-button"
+          className="action-btn"
         >
-          Open MetaMask Again
+          {isConnecting ? (
+            <>
+              <span className="spinner"></span>
+              Opening...
+            </>
+          ) : (
+            'Open in MetaMask'
+          )}
         </button>
-        
-        {/iPhone|iPad|iPod/i.test(navigator.userAgent) && (
-          <button
-            onClick={() => window.location.href = 'https://apps.apple.com/app/metamask/id1438144202'}
-            className="mobile-button secondary"
-          >
-            Install MetaMask from App Store
-          </button>
-        )}
       </div>
     );
   }
