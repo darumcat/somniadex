@@ -20,62 +20,72 @@ const MintCard = ({ account, isSomniaNetwork }) => {
         signer
       );
 
-      // Проверка лимита
       const amountWei = ethers.parseUnits(amount, 18);
       if (amountWei > ethers.parseUnits('100000', 18)) {
-        throw new Error('Максимум 100,000 токенов за раз');
+        throw new Error('Maximum 100,000 tokens per mint');
       }
 
       const tx = await tokenContract.mint(account, amountWei);
       await tx.wait();
-      alert(`Успешно заминчено ${amount} ${token}!`);
+      alert(`Successfully minted ${amount} ${token}!`);
       setAmount('');
     } catch (error) {
       console.error(error);
-      alert('Ошибка: ' + (error.reason || error.message));
+      alert('Error: ' + (error.reason || error.message));
     } finally {
       setIsMinting(false);
     }
   };
 
   return (
-    <div className="card mint-card">
-      <h2>Минтинг токенов</h2>
+    <div className="card">
+      <h2>Mint Tokens</h2>
       
-      <div className="input-group">
-        <label className="amount-label">Количество (макс. 100,000)</label>
+      <div className="input-section">
+        <label>Amount (max 100,000):</label>
         <input
           type="number"
-          placeholder="Введите количество"
+          placeholder="Enter amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           max="100000"
           min="1"
         />
       </div>
-      
-      <div className="token-selection">
-        <div 
-          className={`token-option ${token === 'GRTS' ? 'active' : ''}`}
-          onClick={() => setToken('GRTS')}
-        >
-          <img src="/assets/grts-logo.png" alt="GRTS" className="token-icon" />
-          <span className="token-label">GreatSomnia (GRTS)</span>
-        </div>
-        <div 
-          className={`token-option ${token === 'WNDRS' ? 'active' : ''}`}
-          onClick={() => setToken('WNDRS')}
-        >
-          <img src="/assets/wndrs-logo.png" alt="WNDRS" className="token-icon" />
-          <span className="token-label">WonderfulSomnia (WNDRS)</span>
+
+      <div className="token-choice">
+        <h3>Select Token:</h3>
+        <div className="token-options">
+          <button
+            className={`token-btn ${token === 'GRTS' ? 'active' : ''}`}
+            onClick={() => setToken('GRTS')}
+          >
+            <img src="/assets/grts-logo.png" alt="GRTS" />
+            <span>GRTS</span>
+          </button>
+          <button
+            className={`token-btn ${token === 'WNDRS' ? 'active' : ''}`}
+            onClick={() => setToken('WNDRS')}
+          >
+            <img src="/assets/wndrs-logo.png" alt="WNDRS" />
+            <span>WNDRS</span>
+          </button>
         </div>
       </div>
-      
+
       <button
+        className="action-btn"
         onClick={handleMint}
         disabled={!account || !isSomniaNetwork || !amount || isMinting}
       >
-        {isMinting ? 'Минтинг...' : 'Заминтить'}
+        {isMinting ? (
+          <>
+            <span className="spinner"></span>
+            Minting...
+          </>
+        ) : (
+          'Mint Tokens'
+        )}
       </button>
     </div>
   );
