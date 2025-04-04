@@ -57,7 +57,7 @@ h1 {
 }
 
 /* Формы */
-.input-group {
+.input-group, .input-section {
   margin-bottom: 1.5rem;
 }
 
@@ -73,16 +73,17 @@ input {
 }
 
 /* Стили для выбора токенов */
-.token-selection {
-  display: flex;
-  gap: 10px;
+.token-selection, .token-options, .direction-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
   margin-bottom: 1.5rem;
 }
 
-.token-option {
+.token-option, .token-btn, .direction-btn {
   flex: 1;
   padding: 12px;
-  border-radius: 8px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.1);
   cursor: pointer;
   transition: all 0.3s ease;
@@ -91,18 +92,19 @@ input {
   align-items: center;
   justify-content: center;
   text-align: center;
+  border: none;
 }
 
-.token-option:hover {
+.token-option:hover, .token-btn:hover, .direction-btn:hover {
   background: rgba(110, 69, 226, 0.2);
 }
 
-.token-option.active {
+.token-option.active, .token-btn.active, .direction-btn.active {
   background: rgba(110, 69, 226, 0.4);
   border: 1px solid #6e45e2;
 }
 
-.token-icon {
+.token-icon, .token-btn img, .direction-btn img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -110,8 +112,25 @@ input {
   margin-bottom: 8px;
 }
 
+/* Направление свапа */
+.direction-btn span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.direction-btn img {
+  margin-bottom: 0;
+  margin-right: 8px;
+}
+
+.direction-btn .arrow {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+}
+
 /* Кнопки */
-button {
+button, .action-btn {
   background: linear-gradient(90deg, #6e45e2, #8a2be2);
   color: white;
   border: none;
@@ -125,15 +144,46 @@ button {
   font-size: 1rem;
 }
 
-button:hover:not(:disabled) {
+button:hover:not(:disabled), .action-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(110, 69, 226, 0.4);
 }
 
-button:disabled {
+button:disabled, .action-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   background: #555;
+}
+
+/* Дополнительные стили для ясности */
+.token-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.amount-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Анимации спиннера */
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Адаптивность */
@@ -151,21 +201,7 @@ button:disabled {
     gap: 1rem;
   }
 
-  .token-selection {
-    flex-direction: column;
+  .token-selection, .token-options, .direction-options {
+    grid-template-columns: 1fr;
   }
-}
-
-/* Дополнительные стили для ясности */
-.token-label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin-top: 4px;
-}
-
-.amount-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
 }
