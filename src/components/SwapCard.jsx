@@ -59,15 +59,32 @@ const SwapCard = ({ account, isSomniaNetwork }) => {
           onChange={(e) => setAmount(e.target.value)}
         />
         <select value={fromToken} onChange={(e) => setFromToken(e.target.value)}>
-          <option value="GRTS">GRTS → WNDRS</option>
-          <option value="WNDRS">WNDRS → GRTS</option>
+          <option value="GRTS">
+            <img 
+              src="/assets/grts-logo.png" 
+              alt="GRTS" 
+              className="token-icon"
+            /> GRTS → WNDRS
+          </option>
+          <option value="WNDRS">
+            <img 
+              src="/assets/wndrs-logo.png" 
+              alt="WNDRS" 
+              className="token-icon"
+            /> WNDRS → GRTS
+          </option>
         </select>
       </div>
       <button
         onClick={handleSwap}
         disabled={!account || !isSomniaNetwork || !amount || isSwapping}
       >
-        {isSwapping ? 'Обмен...' : 'Обменять'}
+        {isSwapping ? (
+          <>
+            <span className="loading-spinner"></span>
+            Обмен...
+          </>
+        ) : 'Обменять'}
       </button>
     </div>
   );
