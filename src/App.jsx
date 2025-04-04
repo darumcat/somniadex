@@ -29,6 +29,9 @@ const App = () => {
   useEffect(() => {
     checkNetwork();
     window.ethereum?.on('chainChanged', checkNetwork);
+    return () => {
+      window.ethereum?.removeListener('chainChanged', checkNetwork);
+    };
   }, []);
 
   return (
