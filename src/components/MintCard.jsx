@@ -38,7 +38,7 @@ const MintCard = ({ account, isSomniaNetwork }) => {
     }
   };
 
-  return (
+ return (
     <div className="card mint-card">
       <h2>Минтинг токенов</h2>
       <div className="input-group">
@@ -50,10 +50,22 @@ const MintCard = ({ account, isSomniaNetwork }) => {
           max="100000"
           min="1"
         />
-        <select value={token} onChange={(e) => setToken(e.target.value)}>
-          <option value="GRTS">GreatSomnia (GRTS)</option>
-          <option value="WNDRS">WonderfulSomnia (WNDRS)</option>
-        </select>
+      </div>
+      <div className="token-selection">
+        <div 
+          className={`token-option ${token === 'GRTS' ? 'active' : ''}`}
+          onClick={() => setToken('GRTS')}
+        >
+          <img src="/assets/grts-logo.png" alt="GRTS" className="token-icon" />
+          <span>GreatSomnia (GRTS)</span>
+        </div>
+        <div 
+          className={`token-option ${token === 'WNDRS' ? 'active' : ''}`}
+          onClick={() => setToken('WNDRS')}
+        >
+          <img src="/assets/wndrs-logo.png" alt="WNDRS" className="token-icon" />
+          <span>WonderfulSomnia (WNDRS)</span>
+        </div>
       </div>
       <button
         onClick={handleMint}
