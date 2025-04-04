@@ -48,33 +48,37 @@ const SwapCard = ({ account, isSomniaNetwork }) => {
     }
   };
 
- return (
+  return (
     <div className="card swap-card">
       <h2>Обмен токенов</h2>
+      
       <div className="input-group">
+        <label className="amount-label">Количество</label>
         <input
           type="number"
-          placeholder="Количество"
+          placeholder="Введите количество"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
       </div>
+      
       <div className="token-selection">
         <div 
           className={`token-option ${fromToken === 'GRTS' ? 'active' : ''}`}
           onClick={() => setFromToken('GRTS')}
         >
           <img src="/assets/grts-logo.png" alt="GRTS" className="token-icon" />
-          <span>GRTS → WNDRS</span>
+          <span className="token-label">GRTS → WNDRS</span>
         </div>
         <div 
           className={`token-option ${fromToken === 'WNDRS' ? 'active' : ''}`}
           onClick={() => setFromToken('WNDRS')}
         >
           <img src="/assets/wndrs-logo.png" alt="WNDRS" className="token-icon" />
-          <span>WNDRS → GRTS</span>
+          <span className="token-label">WNDRS → GRTS</span>
         </div>
       </div>
+      
       <button
         onClick={handleSwap}
         disabled={!account || !isSomniaNetwork || !amount || isSwapping}
