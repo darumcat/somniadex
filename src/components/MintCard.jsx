@@ -20,7 +20,7 @@ const MintCard = ({ account, isSomniaNetwork }) => {
         signer
       );
 
-      // Проверка лимита (не более 100k токенов)
+      // Проверка лимита
       const amountWei = ethers.parseUnits(amount, 18);
       if (amountWei > ethers.parseUnits('100000', 18)) {
         throw new Error('Максимум 100,000 токенов за раз');
@@ -38,35 +38,39 @@ const MintCard = ({ account, isSomniaNetwork }) => {
     }
   };
 
- return (
+  return (
     <div className="card mint-card">
       <h2>Минтинг токенов</h2>
+      
       <div className="input-group">
+        <label className="amount-label">Количество (макс. 100,000)</label>
         <input
           type="number"
-          placeholder="Количество (макс. 100,000)"
+          placeholder="Введите количество"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           max="100000"
           min="1"
         />
       </div>
+      
       <div className="token-selection">
         <div 
           className={`token-option ${token === 'GRTS' ? 'active' : ''}`}
           onClick={() => setToken('GRTS')}
         >
           <img src="/assets/grts-logo.png" alt="GRTS" className="token-icon" />
-          <span>GreatSomnia (GRTS)</span>
+          <span className="token-label">GreatSomnia (GRTS)</span>
         </div>
         <div 
           className={`token-option ${token === 'WNDRS' ? 'active' : ''}`}
           onClick={() => setToken('WNDRS')}
         >
           <img src="/assets/wndrs-logo.png" alt="WNDRS" className="token-icon" />
-          <span>WonderfulSomnia (WNDRS)</span>
+          <span className="token-label">WonderfulSomnia (WNDRS)</span>
         </div>
       </div>
+      
       <button
         onClick={handleMint}
         disabled={!account || !isSomniaNetwork || !amount || isMinting}
