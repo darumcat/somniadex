@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSP Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval' https://*.ethers.org https://*.ethers.io https://*.metamask.io;
+    connect-src *;
+    style-src 'self' 'unsafe-inline';
+    img-src * data:;
+  ">
   <title>Somnia Swap DApp</title>
   <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
 </head>
